@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title id="tittxt"></title>
+  <meta name="renderer" content="webkit|ie-comp|ie-stand">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+  <link rel="stylesheet" href="./css/font.css">
+  <link rel="stylesheet" href="./css/xadmin.css">
+  <script src="formjs/dictionaries.js" type="text/javascript"></script>
+  <script type="text/javascript" src="js/jquery/jquery.min.js"></script>
+  <script src="./lib/layui/layui.js" charset="utf-8"></script>
+  <script type="text/javascript" src="./js/xadmin.js"></script>
+  <script src="js/jquery.cookie.js" type="text/javascript"></script>
+</head>
+
+<body>
+  <div class="container">
+    <div class="logo"><a href="./main.html" id="dvlogo"></a></div>
+    <ul class="layui-nav left fast-add" lay-filter="">
+      
+      <li class="layui-nav-item"><a id="lia1" _href="cam-list.html" href="#"><cite id="c9"></cite></a></li>
+      <li class="layui-nav-item"><a _href="alarm-list.html" href="#"><cite id="c3"></cite></a></li>
+      <li class="layui-nav-item" id="lishow2"><a _href="admin-list.html" href="#"><cite id="c8"></cite></a></li>
+      <li class="layui-nav-item" id="lishow3"><a _href="system-list.html" href="#"><cite id="c10"></cite></a></li>
+    </ul>
+    <ul class="layui-nav right" lay-filter="">
+      <li class="layui-nav-item">
+        <a href="javascript:;" id="auser"></a>
+      </li>
+      <li class="layui-nav-item to-index"><a href="/download/vlc-2.2.6-win32.exe" id="a4"></a></li>
+      <li class="layui-nav-item to-index"><a href="/estwmoban/scanboard.html" id="a2"></a></li>
+      <li class="layui-nav-item to-index"><a href="/" id="a3"></a></li>
+    </ul>
+  </div>
+  <div class="page-content" style="left: 0px;">
+    <div class="layui-tab tab" lay-filter="xbs_tab" lay-allowclose="false">
+      <ul class="layui-tab-title">
+        <li style="display: none;"></li>
+      </ul>
+      <div class="layui-tab-content">
+        <div class="layui-tab-item layui-show">
+          <iframe src='' frameborder="0" scrolling="yes" class="x-iframe"></iframe>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="page-content-bg"></div>
+  <div class="footer">
+    <div id="dvfoot" class="copyright"></div>  
+    <div id="dvfootr" class="copyright" style="margin-top: -41px;"></div> 
+</div> 
+  <script>
+    $(function () {
+      initpicback();
+      chgLang();
+    })
+
+    function chgLang() {
+      $("#c3").text('巡检记录');
+     
+      $("#c6").text(dictionaries_message11);
+      $("#c7").text(dictionaries_message12);
+      $("#c8").text(dictionaries_message13);
+      $("#c9").text(dictionaries_message180);
+      $("#c10").text(dictionaries_message222);
+      $("#a2").text(dictionaries_message15);
+      $("#a3").text(dictionaries_message16);
+      $("#a4").text(dictionaries_message221);
+      $("#auser").text($.cookie('username'));
+
+      setTimeout(function () { $("#lia1").click(); }, 500);
+
+      if ($.cookie('userrule') == '0') {
+        $("#lishow2").hide();
+        $("#lishow3").hide();
+      }
+      $("#dvfootr").css("margin-left", (document.body.clientWidth - 200) + 'px');
+    }
+
+    function initpicback() {
+      $.get("http://" + $.cookie('ip') + ":" + $.cookie('port') + "/webapps/selectpoc", function (result) {
+        $("#dvlogo").text(result[0].pocname);
+        $("#tittxt").text(result[0].pocname);
+        $("#dvfoot").text(result[0].pocname+' ' + dictionaries_message258);
+      });
+    }
+
+    layui.use('element', function () {
+      var element = layui.element;
+      element.on('tab(xbs_tab)', function (data) {
+        if(window.frames[data.index].table != undefined)
+        {
+          window.frames[data.index].table.resize();
+        }
+      });
+    });
+
+    window.onresize = function () {
+      $("#dvfootr").css("margin-left", (document.body.clientWidth - 200) + 'px');
+    }
+
+    function time() {
+				var vWeek, vWeek_s, vDay;
+				vWeek = [dictionaries_message252, dictionaries_message246, dictionaries_message247, dictionaries_message248, dictionaries_message249, dictionaries_message250, dictionaries_message251];
+				var date =  new Date();
+				year = date.getFullYear();
+				month = date.getMonth() + 1;
+				day = date.getDate();
+				hours = date.getHours();
+				minutes = date.getMinutes();
+				seconds = date.getSeconds();
+				vWeek_s = date.getDay();
+				$("#dvfootr").text(year + "-" + month + "-" + day + "\t" + hours + ":" + minutes + ":" + seconds + "\t" + vWeek[vWeek_s]);
+
+		}
+		
+    setInterval("time()", 1000);
+
+  </script>
+</body>
+
+</html>

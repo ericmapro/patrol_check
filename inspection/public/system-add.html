@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="./css/font.css">
+    <link rel="stylesheet" href="./css/xadmin.css">
+    <script src="formjs/dictionaries.js" type="text/javascript"></script>
+    <script type="text/javascript" src="js/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="./lib/layui/layui.js" charset="utf-8"></script>
+    <script type="text/javascript" src="./js/xadmin.js"></script>
+    <script src="js/jquery.cookie.js" type="text/javascript"></script>
+</head>
+<body>
+    <div class="x-body">
+        <form class="layui-form">
+            <div class="layui-form-item">
+                <label class="layui-form-label">
+					<span>巡检开始时间</span>
+				</label>
+				<div class="layui-input-inline">
+					<select id="selbegin" class="valid">
+					</select>
+				</div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">
+					<span>巡检结束时间</span>
+				</label>
+				<div class="layui-input-inline">
+					<select id="selend" class="valid">
+					</select>
+				</div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">
+					<span>巡检时间间隔</span>
+				</label>
+				<div class="layui-input-inline">
+					<select id="selinterval" class="valid">
+					</select>
+				</div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">
+					<span>最大盲区时间</span>
+				</label>
+				<div class="layui-input-inline">
+					<select id="selmaxlost" class="valid">
+					</select>
+				</div>
+                <div class="layui-form-mid layui-word-aux">从上一检测点到下一检测点,巡检人员从摄像头消失的时间.
+				</div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">
+					<span>巡检最短时间</span>
+				</label>
+				<div class="layui-input-inline">
+					<select id="selstaytime" class="valid">
+					</select>
+				</div>
+                <div class="layui-form-mid layui-word-aux">设定一次巡检过程最短的时间.
+				</div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">
+					<span>数据保存路径</span>
+				</label>
+				<div class="layui-input-inline" style="width: 380px;">
+                    <input type="text" id="txtdatapath" autocomplete="off" class="layui-input" maxlength="200" style="width: 380px;">
+				</div>
+                <div class="layui-form-mid layui-word-aux">图片、视频等文件存储的路径.
+				</div>
+            </div>
+            <div class="layui-form-item">
+                <label for="L_repass" class="layui-form-label">
+                </label>
+                <button class="layui-btn" lay-filter="add" lay-submit="" id="btntxt">
+                </button>
+            </div>
+        </form>
+    </div>
+    <script>
+        var form;
+        layui.use(['form', 'layer'], function () {
+            $ = layui.jquery;
+            form = layui.form
+            var layer = layui.layer;
+
+            form.on('submit(add)', function (data) {
+                var vselbegin = $("#selbegin").val();
+                var vselend = $("#selend").val();
+                var vselinterval = $("#selinterval").val();
+                var vselmaxlost = $("#selmaxlost").val();
+                var vselstaytime = $("#selstaytime").val();
+                var vtxtdatapath = $("#txtdatapath").val();
+               
+                var now = new Date();
+                if (vid != null) {
+                    $.get("http://" + $.cookie('ip') + ":" + $.cookie('port') + "/currencys/update", {
+                        "save_data_path": vtxtdatapath, "stay_time_mini": vselstaytime, "max_lost_time": vselmaxlost,
+                        "id": vid, "begin_time": vselbegin, "end_time": vselend,
+                        "interval": vselinterval, "Rtn": now.getTime()
+                    }, function (data) {
+                        if (data == 'ok') {
+                            layer.alert(dictionaries_message65, { icon: 6 ,title:dictionaries_message241,btn:[dictionaries_message63]}, function () {
+                                var index = window.name.substring(18);
+                                window.parent.postMessage(index, '*');
+                                layer.closeAll();
+                                closewindow();
+                            });
+                        }
+                        else {
+                            layer.alert(dictionaries_message66, { icon: 2 ,title:dictionaries_message241,btn:[dictionaries_message63]}, function () {
+                                var index = window.name.substring(18);
+                                window.parent.postMessage(index, '*');
+                                layer.closeAll();
+                            });
+                        }
+                    });
+                }
+                else {
+                    $.get("http://" + $.cookie('ip') + ":" + $.cookie('port') + "/currencys/save", {
+                        "save_data_path": vtxtdatapath, "stay_time_mini": vselstaytime, "max_lost_time": vselmaxlost,
+                        "begin_time": vselbegin, "end_time": vselend,
+                        "interval": vselinterval, "Rtn": now.getTime()
+                    }, function (data) {
+                        if (data == 'ok') {
+                            layer.alert(dictionaries_message65, { icon: 6 ,title:dictionaries_message241,btn:[dictionaries_message63]}, function () {
+                                var index = window.name.substring(18);
+                                window.parent.postMessage(index, '*');
+                                layer.closeAll();
+                            });
+                        }
+                        else {
+                            layer.alert(dictionaries_message66, { icon: 2 ,title:dictionaries_message241,btn:[dictionaries_message63]}, function () {
+                                var index = window.name.substring(18);
+                                window.parent.postMessage(index, '*');
+                                layer.closeAll();
+                            });
+                        }
+                    });
+                }
+                return false;
+            });
+            getinfo_system();
+            chgLang();
+        });
+
+        function getinfo_system() {
+            var now = new Date();
+            if (vid != null) {
+                var now = new Date();
+                $.get("http://" + $.cookie('ip') + ":" + $.cookie('port') + "/currencys/searchbyid", { "id": vid, "Rtn": now.getTime() }, function (data) {
+                    if (data.length > 0) {
+                      
+                        $("#selbegin").val(data[0].begin_time);
+                        $("#selend").val(data[0].end_time);
+                        $("#selinterval").val(data[0].curr_interval);
+                        $("#txtdatapath").val(data[0].save_data_path);
+                        $("#selstaytime").val(data[0].stay_time_mini);
+                        $("#selmaxlost").val(data[0].max_lost_time);
+                       
+                        form.render();
+                    }
+                });
+            }
+        }
+
+        function GetQueryString(name) {
+            var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+            var r = window.location.search.substr(1).match(reg);
+            if (r != null) return decodeURI(r[2]); return null;
+        }
+
+        var vid = GetQueryString("id");
+
+        function closewindow() {
+            var index = parent.layer.getFrameIndex(window.name);
+            parent.layer.close(index);
+        }
+
+        function chgLang() {
+           
+            $("#btntxt").text(dictionaries_message63);
+
+            $("#selbegin").empty();
+            $("#selend").empty();
+            $("#selinterval").empty();
+
+            $("#selmaxlost").empty();
+            $("#selstaytime").empty();
+
+            for(icount=0;icount<6;icount++)
+            {
+                $('<option value="' + icount + '">' + icount + '分钟</option>').appendTo($("#selmaxlost"));
+            }
+
+            for(icount=10;icount<41;icount++)
+            {
+                $('<option value="' + icount + '">' + icount + '分钟</option>').appendTo($("#selstaytime"));
+            }
+
+            for(icount=1;icount<25;icount++)
+            {
+                $('<option value="' + icount + '">' + icount + '点</option>').appendTo($("#selbegin"));
+                $('<option value="' + icount + '">' + icount + '点</option>').appendTo($("#selend"));
+                if(icount<9)
+                {
+                    $('<option value="' + icount + '">' + icount + '小时</option>').appendTo($("#selinterval"));
+                }
+            }
+
+            $("#selmaxlost").val('0');
+            $("#selstaytime").val('30');
+			
+            form.render();
+        }
+    </script>
+</body>
+</html>

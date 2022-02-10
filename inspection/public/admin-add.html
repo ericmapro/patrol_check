@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="./css/font.css">
+    <link rel="stylesheet" href="./css/xadmin.css">
+    <script src="formjs/dictionaries.js" type="text/javascript"></script>
+    <script type="text/javascript" src="js/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="./lib/layui/layui.js" charset="utf-8"></script>
+    <script type="text/javascript" src="./js/xadmin.js"></script>
+    <script src="js/jquery.cookie.js" type="text/javascript"></script>
+</head>
+<body>
+    <div class="x-body">
+        <form class="layui-form">
+            <div class="layui-form-item">
+                <label for="username" class="layui-form-label">
+                    <span class="x-red">*</span><span id="sp1"></span>
+                </label>
+                <div class="layui-input-inline">
+                    <input type="text" id="username" name="username" lay-verify="required"
+                        autocomplete="off" class="layui-input" maxlength="20"
+                        onkeyup="value=value.replace(/[^\a-\z\A-\Z0-9\u4E00-\u9FA5]/g,'')" 
+						onpaste="value=value.replace(/[^\a-\z\A-\Z0-9\u4E00-\u9FA5]/g,'')" 
+						oncontextmenu = "value=value.replace(/[^\a-\z\A-\Z0-9\u4E00-\u9FA5]/g,'')">
+                </div>
+                <div class="layui-form-mid layui-word-aux">
+                    <span class="x-red">*</span><span id="sp2"></span>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label for="phone" class="layui-form-label" id="lab1">
+                </label>
+                <div class="layui-input-inline">
+                    <input type="text" id="phone" name="phone" lay-verify="phone" autocomplete="off" class="layui-input" maxlength="11">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label for="L_email" class="layui-form-label" id="lab2">
+                </label>
+                <div class="layui-input-inline">
+                    <input type="text" id="L_email" name="email"  lay-verify="email" autocomplete="off" class="layui-input" maxlength="30">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label" id="lab3"></label>
+                <div class="layui-input-block" id="IsPurchased">
+                    <input id="rad1" type="radio" name="sex" lay-filter="otherReq">
+                    <input id="rad2" type="radio" name="sex" lay-filter="otherReq" checked>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label for="L_pass" class="layui-form-label">
+                    <span class="x-red">*</span><span id="sp3"></span>
+                </label>
+                <div class="layui-input-inline">
+                    <input type="password" id="L_pass" name="pass"  lay-verify="pass" autocomplete="off"
+                        class="layui-input"  maxlength="16"> 
+                </div>
+                <div class="layui-form-mid layui-word-aux" id="dvtxt">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label for="L_repass" class="layui-form-label">
+                    <span class="x-red">*</span><span id="sp4"></span>
+                </label>
+                <div class="layui-input-inline">
+                    <input type="password" id="L_repass" name="repass"  lay-verify="repass"
+                        autocomplete="off" class="layui-input"  maxlength="16">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label for="L_repass" class="layui-form-label">
+                </label>
+                <button class="layui-btn" lay-filter="add" lay-submit="" id="btntxt">
+                </button>
+            </div>
+        </form>
+    </div>
+    <script>
+        var form;
+        layui.use(['form', 'layer'], function () {
+            $ = layui.jquery;
+            form = layui.form
+            var layer = layui.layer;
+
+            form.verify({
+                pass: [/(.+){5,12}$/, dictionaries_message166]
+                , repass: function (value) {
+                    if ($('#L_pass').val() != $('#L_repass').val()) {
+                        return dictionaries_message167;
+                    }
+                }
+            });
+
+            form.on('submit(add)', function (data) {
+                var vusername = $("#username").val();
+                var vphone = $("#phone").val();
+                var vL_email = $("#L_email").val();
+                var vL_pass = $("#L_pass").val();
+                var vonfff = 0;
+                if ($('#IsPurchased input[name="sex"]:checked ').val() == dictionaries_message156) {
+                    vonfff = 1;
+                }
+                var now = new Date();
+                if (vuserid != null) {
+                    $.get("http://" + $.cookie('ip') + ":" + $.cookie('port') + "/users/update", {
+                        "userid": vuserid, "username": vusername, "userpassword": vL_pass,
+                        "userphone": vphone, "useremail": vL_email, "userrule": vonfff, "Rtn": now.getTime()
+                    }, function (data) {
+                        if (data == 'ok') {
+                            layer.alert(dictionaries_message65, { icon: 6 ,title:dictionaries_message241,btn:[dictionaries_message63]}, function () {
+                                var index = window.name.substring(18);
+                                window.parent.postMessage(index, '*');
+                                layer.closeAll();
+                                closewindow();
+                            });
+                        }
+                        else {
+                            layer.alert(dictionaries_message66, { icon: 2 ,title:dictionaries_message241,btn:[dictionaries_message63]}, function () {
+                                var index = window.name.substring(18);
+                                window.parent.postMessage(index, '*');
+                                layer.closeAll();
+                            });
+                        }
+                    });
+                }
+                else {
+                    $.get("http://" + $.cookie('ip') + ":" + $.cookie('port') + "/users/save", {
+                        "username": vusername, "userpassword": vL_pass,
+                        "userphone": vphone, "useremail": vL_email, "userrule": vonfff, "Rtn": now.getTime()
+                    }, function (data) {
+                        if (data == 'ok') {
+                            layer.alert(dictionaries_message65, { icon: 6 ,title:dictionaries_message241,btn:[dictionaries_message63]}, function () {
+                                var index = window.name.substring(18);
+                                window.parent.postMessage(index, '*');
+                                layer.closeAll();
+                                closewindow();
+                            });
+                        }
+                        else {
+                            layer.alert(dictionaries_message66, { icon: 2 ,title:dictionaries_message241,btn:[dictionaries_message63]}, function () {
+                                var index = window.name.substring(18);
+                                window.parent.postMessage(index, '*');
+                                layer.closeAll();
+                            });
+                        }
+                    });
+                }
+                return false;
+            });
+            getinfo_user();
+            chgLang();
+        });
+
+        function getinfo_user() {
+            var now = new Date();
+            if (vuserid != null) {
+                var now = new Date();
+                $.get("http://" + $.cookie('ip') + ":" + $.cookie('port') + "/users/searchbyid", { "userid": vuserid, "Rtn": now.getTime() }, function (data) {
+                    if (data.length > 0) {
+                        $("#username").val(data[0].username);
+                        $("#phone").val(data[0].userphone);
+                        $("#L_email").val(data[0].useremail);
+                        $("#L_pass").val(data[0].userpassword);
+                        $("#L_repass").val(data[0].userpassword);
+                        if (data[0].userrule == '1') {
+                            $('input[name="sex"][value="' + dictionaries_message156 + '"]').prop("checked", true);
+                        }
+                        else {
+                            $('input[name="sex"][value="' + dictionaries_message155 + '"]').prop("checked", true);
+                        }
+                        form.render();
+                    }
+                });
+            }
+        }
+
+        function GetQueryString(name) {
+            var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+            var r = window.location.search.substr(1).match(reg);
+            if (r != null) return decodeURI(r[2]); return null;
+        }
+
+        var vuserid = GetQueryString("userid");
+
+        function closewindow() {
+            var index = parent.layer.getFrameIndex(window.name);
+            parent.layer.close(index);
+        }
+
+        function chgLang() {
+            $("#sp1").text(dictionaries_message157);
+            $("#sp2").text(dictionaries_message162);
+            $("#sp3").text(dictionaries_message163);
+            $("#sp4").text(dictionaries_message164);
+            $("#lab1").text(dictionaries_message158);
+            $("#lab2").text(dictionaries_message159);
+            $("#lab3").text(dictionaries_message160);
+            $("#dvtxt").text(dictionaries_message165);
+            $("#rad1").attr("title", dictionaries_message156);
+            $("#rad2").attr("title", dictionaries_message155);
+            $("#rad1").val(dictionaries_message156);
+            $("#rad2").val(dictionaries_message155);
+            $("#btntxt").text(dictionaries_message63);
+            form.render('radio');
+        }
+    </script>
+</body>
+</html>
