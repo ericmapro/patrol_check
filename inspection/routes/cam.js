@@ -16,7 +16,7 @@ router.get('/search', function (req, res, next) {
 			console.log('[SELECT ERROR] - ', err.message); 
 			return;
 		}
-		connection.query('SELECT * FROM camera', function (err, rows) {
+		connection.query('SELECT * FROM camera_config', function (err, rows) {
 			if (err) {
 				console.log('[SELECT ERROR] - ', err.message);
 				return;
@@ -44,7 +44,7 @@ router.get('/searchall', function (req, res, next) {
 			console.log('[SELECT ERROR] - ', err.message); 
 			return;
 		}
-		connection.query('SELECT * FROM camera order by sequence', function (err, rows) {
+		connection.query('SELECT * FROM camera_config order by sequence', function (err, rows) {
 			if (err) {
 				console.log('[SELECT ERROR] - ', err.message);
 				return;
@@ -64,7 +64,7 @@ router.get('/searchbyid', function (req, res, next) {
 			console.log('[SELECT ERROR] - ', err.message); 
 			return;
 		}
-		connection.query('SELECT * FROM camera where id = "' + req.query.camid + '"', function (err, rows) {
+		connection.query('SELECT * FROM camera_config where camera_id = "' + req.query.camid + '"', function (err, rows) {
 			if (err) {
 				console.log('[SELECT ERROR] - ', err.message);
 				return;
@@ -85,7 +85,7 @@ router.get('/delete', function (req, res, next) {
 			return;
 		}
 		
-			connection.query('DELETE FROM camera where id = "' + req.query.camid + '"', function (err, rows) {
+			connection.query('DELETE FROM camera_config where camera_id = "' + req.query.camid + '"', function (err, rows) {
 				if (err) {
 					console.log('[SELECT ERROR] - ', err.message);
 					return;
@@ -109,7 +109,7 @@ router.get('/deleteall', function (req, res, next) {
 			return;
 		}
 		
-			connection.query('DELETE FROM camera where id IN (' + vcams + ')', function (err, rows) {
+			connection.query('DELETE FROM camera_config where camera_id IN (' + vcams + ')', function (err, rows) {
 				if (err) {
 					console.log('[SELECT ERROR] - ', err.message);
 					return;
@@ -130,12 +130,12 @@ router.get('/update', function (req, res, next) {
 			console.log('[SELECT ERROR] - ', err.message); 
 			return;
 		}
-		connection.query('update camera set camera_name = "' + req.query.camname + '" , camera_factory = "' + req.query.camerafactory + '" , ip_address = "' + req.query.ipaddress +
+		connection.query('update camera_config set camera_name = "' + req.query.camname + '" , camera_factory = "' + req.query.camerafactory + '" , ip_address = "' + req.query.ipaddress +
 			'" , rtsp_port = "' + req.query.rtspport + '" , user_name = "' + req.query.username +
 			'" , password = "' + req.query.password + '" , code_stream = "' + req.query.codestream + 
 			'" , sequence = "' + req.query.sequence + '" , category = "' + req.query.category + 
 			'" , detect_level = "' + req.query.detectlevel + '" , stay_time = "' + req.query.staytime + 
-			'" , url = "' + req.query.url + '" where id = "' + req.query.camid + '"', function (err, rows) {
+			'" , url = "' + req.query.url + '" where camera_id = "' + req.query.camid + '"', function (err, rows) {
 
 				if (err) {
 					console.log('[SELECT ERROR] - ', err.message);
@@ -168,7 +168,7 @@ router.get('/save', function (req, res, next) {
 			console.log('[SELECT ERROR] - ', err.message); 
 			return;
 		}
-		connection.query('INSERT INTO camera(camera_name,camera_factory,ip_address,rtsp_port,user_name,password,code_stream,url,sequence,category,detect_level,stay_time) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)', addSqlParams, function (err, rows) {
+		connection.query('INSERT INTO camera_config(camera_name,camera_factory,ip_address,rtsp_port,user_name,password,code_stream,url,sequence,category,detect_level,stay_time) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)', addSqlParams, function (err, rows) {
 
 			if (err) {
 				console.log('[SELECT ERROR] - ', err.message);

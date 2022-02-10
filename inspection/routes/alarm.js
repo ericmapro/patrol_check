@@ -19,7 +19,7 @@ router.get('/search', function (req, res, next) {
 			console.log('[SELECT ERROR] - ', err.message); 
 			return;
 		}
-			connection.query('SELECT * FROM recoreds where record_time <= "' + vendtime + ' 23:59:59" and record_time >= "' + vbegintime + ' 00:00:00" order by record_time DESC', function (err, rows) {
+			connection.query('SELECT * FROM records where record_time <= "' + vendtime + ' 23:59:59" and record_time >= "' + vbegintime + ' 00:00:00" order by record_time DESC', function (err, rows) {
 						if (err) {
 							console.log('[SELECT ERROR] - ', err.message);
 							return;
@@ -52,7 +52,7 @@ router.get('/searchall', function (req, res, next) {
 			console.log('[SELECT ERROR] - ', err.message); 
 			return;
 		}
-		connection.query('SELECT * FROM recoreds order by record_time DESC', function (err, rows) {
+		connection.query('SELECT * FROM records order by record_time DESC', function (err, rows) {
 				if (err) {
 					console.log('[SELECT ERROR] - ', err.message);
 					return;
@@ -78,7 +78,7 @@ router.get('/searchbyid', function (req, res, next) {
 			console.log('[SELECT ERROR] - ', err.message); 
 			return;
 		}
-		connection.query('SELECT * FROM recoreds where record_id = "' + vrecord_id + '"', function (err, rows) {
+		connection.query('SELECT * FROM records where record_id = "' + vrecord_id + '"', function (err, rows) {
 			if (err) {
 				console.log('[SELECT ERROR] - ', err.message);
 				return;
@@ -103,7 +103,7 @@ router.get('/searchallnow', function (req, res, next) {
 			console.log('[SELECT ERROR] - ', err.message); 
 			return;
 		}
-		connection.query('SELECT * FROM recoreds order by record_time DESC LIMIT 0,1', function (err, rows) {
+		connection.query('SELECT * FROM records order by record_time DESC LIMIT 0,1', function (err, rows) {
 			if (err) {
 				console.log('[SELECT ERROR] - ', err.message);
 				return;
@@ -127,7 +127,7 @@ router.get('/selectcurrency', function (req, res, next) {
 			console.log('[SELECT ERROR] - ', err.message); 
 			return;
 		}
-		connection.query('select * FROM currency', function (err, rows) {
+		connection.query('select * FROM global_config', function (err, rows) {
 				if (err) {
 					console.log('[SELECT ERROR] - ', err.message);
 					return;

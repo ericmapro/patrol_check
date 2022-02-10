@@ -16,7 +16,7 @@ router.get('/searchall', function (req, res, next) {
 			  console.log('[SELECT ERROR] - ', err.message); 
 			  return;
 		  }
-	  connection.query('SELECT * FROM currency', function (err, rows) {
+	  connection.query('SELECT * FROM global_config', function (err, rows) {
 		if (err) {
 		  console.log('[SELECT ERROR] - ', err.message);
 		  return;
@@ -45,7 +45,7 @@ router.get('/searchbyid', function (req, res, next) {
 			  console.log('[SELECT ERROR] - ', err.message); 
 			  return;
 		  }
-	  connection.query('SELECT * FROM currency where id = "' + vid + '"', function (err, rows) {
+	  connection.query('SELECT * FROM global_config where id = "' + vid + '"', function (err, rows) {
 		if (err) {
 		  console.log('[SELECT ERROR] - ', err.message);
 		  return;
@@ -65,7 +65,7 @@ router.get('/delete', function (req, res, next) {
 			  console.log('[SELECT ERROR] - ', err.message); 
 			  return;
 		  }
-	  connection.query('delete from currency where id = "' + vid + '"', function (err, rows) {
+	  connection.query('delete from global_config where id = "' + vid + '"', function (err, rows) {
 		if (err) {
 		  console.log('[SELECT ERROR] - ', err.message);
 		  return;
@@ -85,7 +85,7 @@ router.get('/deleteall', function (req, res, next) {
 			  console.log('[SELECT ERROR] - ', err.message); 
 			  return;
 		  }
-	  connection.query('DELETE FROM currency where id IN (' + vids + ')', function (err, rows) {
+	  connection.query('DELETE FROM global_config where id IN (' + vids + ')', function (err, rows) {
 		if (err) {
 		  console.log('[SELECT ERROR] - ', err.message);
 		  return;
@@ -112,7 +112,7 @@ router.get('/update', function (req, res, next) {
 			  console.log('[SELECT ERROR] - ', err.message); 
 			  return;
 		  }
-	  connection.query('update currency set begin_time = "' + vbegin_time + '" , end_time = "' + vend_time + '" , curr_interval = "' + vinterval + 
+	  connection.query('update global_config set begin_time = "' + vbegin_time + '" , end_time = "' + vend_time + '" , curr_interval = "' + vinterval + 
 	  '" , save_data_path = "' + vsave_data_path + '" , stay_time_mini = "' + vstay_time_mini + '" , max_lost_time = "' + vmax_lost_time +
 		'" where id = "' + vid + '"', function (err, rows) {
 		  if (err) {
@@ -140,7 +140,7 @@ router.get('/save', function (req, res, next) {
 			  console.log('[SELECT ERROR] - ', err.message); 
 			  return;
 		  }
-	  connection.query('INSERT INTO currency(begin_time,end_time,curr_interval,save_data_path,stay_time_mini,max_lost_time) VALUES(?,?,?,?,?,?)', addSqlParams, function (err, rows) {
+	  connection.query('INSERT INTO global_config(begin_time,end_time,curr_interval,save_data_path,stay_time_mini,max_lost_time) VALUES(?,?,?,?,?,?)', addSqlParams, function (err, rows) {
 		if (err) {
 		  console.log('[SELECT ERROR] - ', err.message);
 		  return;

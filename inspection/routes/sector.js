@@ -75,8 +75,8 @@ router.get('/searchxy', function (req, res, next) {
 			console.log('[SELECT ERROR] - ', err.message); 
 			return;
 		}
-		connection.query('select camera.*,cameraxy.textx,cameraxy.texty,cameraxy.canvaswidth,cameraxy.canvasheight from camera ' +
-			' LEFT JOIN cameraxy on camera.id = cameraxy.camearid  ', function (err, rows) {
+		connection.query('select camera_config.*,cameraxy.textx,cameraxy.texty,cameraxy.canvaswidth,cameraxy.canvasheight from camera_config ' +
+			' LEFT JOIN cameraxy on camera_config.camera_id = cameraxy.camearid  ', function (err, rows) {
 				if (err) {
 					console.log('[SELECT ERROR] - ', err.message);
 					return;

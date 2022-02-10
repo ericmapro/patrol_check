@@ -77,7 +77,7 @@
 
         function initpicback() {
             $.get("http://" + $.cookie('ip') + ":" + $.cookie('port') + "/webapps/selectlogo", function (result) {
-                $("#imgpic").attr("src", result[0].picsrc);
+                //$("#imgpic").attr("src", result[0].picsrc);
             });
             $.get("http://" + $.cookie('ip') + ":" + $.cookie('port') + "/webapps/selectpoc", function (result) {
                 $("#dvtxt").text(result[0].pocname + dictionaries_message2);

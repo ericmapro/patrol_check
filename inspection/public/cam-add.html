@@ -157,7 +157,7 @@
       var r = window.location.search.substr(1).match(reg);
       if (r != null) return decodeURI(r[2]); return null;
     }
-
+    var now = new Date();
     var vcamid = GetQueryString("camid");
     var layer;
     var form;
@@ -249,7 +249,11 @@
         else{
           vcamrtsp = getrtsp(vpassip,vcamport,vusername,vuserpass,vselcj,vselml);
         }
-        var now = new Date();
+
+        var vsavemessage = {
+            "operation": "SaveConfigure"
+        }
+        
         if (vcamid != null) {
           $.get("http://" + $.cookie('ip') + ":" + $.cookie('port') + "/cams/update", {
             "camid": vcamid, "camname": vname,"camerafactory": vselcj,"codestream": vselml,
@@ -257,6 +261,10 @@
             "sequence": vselsequence,"category":arr_box,"detectlevel":vselyg,"staytime":vselpc, "Rtn": now.getTime()
           }, function (data) {
             if (data == 'ok') {
+              $.get("http://" + $.cookie('ip') + ":" + $.cookie('port') + "/webapps/savedb", {"savejson":vsavemessage,"Rtn": now.getTime()
+              }, function (data) {
+
+              });
               layer.alert(dictionaries_message65, { icon: 6 ,title:dictionaries_message241,btn:[dictionaries_message63]}, function () {
                 var index = window.name.substring(18);
                 window.parent.postMessage(index, '*');
@@ -280,6 +288,10 @@
             "sequence": vselsequence,"category":arr_box,"detectlevel":vselyg,"staytime":vselpc, "Rtn": now.getTime()
           }, function (data) {
             if (data == 'ok') {
+              $.get("http://" + $.cookie('ip') + ":" + $.cookie('port') + "/webapps/savedb", {"savejson":vsavemessage,"Rtn": now.getTime()
+              }, function (data) {
+
+              });
               layer.alert(dictionaries_message65, { icon: 6 ,title:dictionaries_message241,btn:[dictionaries_message63]}, function () {
                 var index = window.name.substring(18);
                 window.parent.postMessage(index, '*');
@@ -300,6 +312,11 @@
       });
       chgLang();
       getinfo_cam();
+
+      $.get("http://" + $.cookie('ip') + ":" + $.cookie('port') + "/webapps/initconnect", {"Rtn": now.getTime()
+          }, function (data) {
+
+          });
     });
 
     function getinfo_cam() {

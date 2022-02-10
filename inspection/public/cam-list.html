@@ -24,7 +24,7 @@
     <table class="layui-table" id="cam" lay-filter="cam">
     </table>
     <script type="text/html" id="barDemo">
-			<a id="a1" class="a1 layui-btn layui-btn-primary layui-btn-xs" onclick="x_admin_show(dictionaries_message25,'./cam-add.html?camid={{ d.id }}')" href="javascript:;">
+			<a id="a1" class="a1 layui-btn layui-btn-primary layui-btn-xs" onclick="x_admin_show(dictionaries_message25,'./cam-add.html?camid={{ d.camera_id }}')" href="javascript:;">
       </a>
       <a id="a4" class="a4 layui-btn layui-btn-danger layui-btn-xs" href="javascript:;" lay-event="del">
       </a>
@@ -35,6 +35,10 @@
   </div>
   <script>
     var table;
+    var vsavemessage = {
+            "operation": "SaveConfigure"
+        }
+var now = new Date();
     layui.use(['laydate', 'table'], function () {
       var laydate = layui.laydate
       table = layui.table
@@ -44,7 +48,7 @@
         , id: 'cams'
         , cols: [[
           { type: 'checkbox', fixed: 'left' }
-          , { field: 'id', hide: true }
+          , { field: 'camera_id', hide: true }
           , { field: 'camera_name', title: dictionaries_message181 }
           , { field: 'camera_factory', title: dictionaries_message230, templet: '#camchangj', unresize: true  ,width:200}
           , { field: 'ip_address', title: dictionaries_message43 ,width:200}
@@ -99,8 +103,12 @@
           layer.confirm(dictionaries_message38, {
             btn: [dictionaries_message39, dictionaries_message40], title: dictionaries_message218
           }, function (index) {
-            var now = new Date();
+            
             $.get("http://" + $.cookie('ip') + ":" + $.cookie('port') + "/cams/delete", { "camid": obj.data.id, "Rtn": now.getTime() }, function (data) {
+              $.get("http://" + $.cookie('ip') + ":" + $.cookie('port') + "/webapps/savedb", {"savejson":vsavemessage,"Rtn": now.getTime()
+              }, function (data) {
+
+              });
               table.reload('cams');
             });
             obj.del();
@@ -110,6 +118,11 @@
       });
 
       chgLang();
+
+      $.get("http://" + $.cookie('ip') + ":" + $.cookie('port') + "/webapps/initconnect", {"Rtn": now.getTime()
+          }, function (data) {
+
+          });
     });
 
     function delAll(argument) {
@@ -125,6 +138,10 @@
           vcams = vcams.substring(1);
           var now = new Date();
           $.get("http://" + $.cookie('ip') + ":" + $.cookie('port') + "/cams/deleteall", { "cams": vcams, "Rtn": now.getTime() }, function (data) {
+            $.get("http://" + $.cookie('ip') + ":" + $.cookie('port') + "/webapps/savedb", {"savejson":vsavemessage,"Rtn": now.getTime()
+              }, function (data) {
+
+              });
             table.reload('cams');
           });
           layer.close(index);
